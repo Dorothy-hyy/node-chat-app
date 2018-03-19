@@ -14,14 +14,14 @@ app.use(express.static(publicPath));  // use a middleware
 io.on('connection',(socket)=>{
     console.log('New user connected');
 
-    socket.emit('newMessage', {
-        from: 'John',
-        text: 'See you then',
-        createAt: 123
-    });
-
     socket.on('createMessage',(message)=>{
         console.log('createMessage', message);
+        // emit to every one who is connected
+        io.emit('newMessage', {
+            from: message.from,
+            text: message.text,
+            createdAt: new Date().getTime()
+        });
     });
 
     socket.on('disconnect',()=>{

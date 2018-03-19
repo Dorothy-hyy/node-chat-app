@@ -6,10 +6,7 @@ socket.on('connect',function(){
 socket.on('disconnect',function(){
     console.log('Disconnected from server');
 
-    socket.emit('createMessage', {
-        from: 'Dorothy',
-        text: 'Yup, that works for me'
-    })
+
 });
 
 socket.on('newMessage', function(message){
