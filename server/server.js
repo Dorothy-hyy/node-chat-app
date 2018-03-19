@@ -23,16 +23,16 @@ io.on('connection',(socket)=>{
         console.log('createMessage', message);
         // emit to every one who is connected
         io.emit('newMessage', generateMessage(message.from, message.text));
-        callback('This is from the server'); //For client acknowledge receiving the message
+        callback(); //For client acknowledge receiving the message
     });
 
     socket.on('createLocationMessage', (coords)=>{
         io.emit('newLocationMessage', generateLocationMessage('Admin',coords.latitude, coords.longitude));
     });
 
-    socket.on('createLocationMessage', (coords)=>{
-        io.emit('newMessage', generateMessage('Admin',`${coords.latitude}, ${coords.longitude}`));
-    });
+    // socket.on('createLocationMessage', (coords)=>{
+    //     io.emit('newMessage', generateMessage('Admin',`${coords.latitude}, ${coords.longitude}`));
+    // });
 
     socket.on('disconnect',()=>{
         console.log('User was disconnected');
