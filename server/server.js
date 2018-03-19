@@ -3,7 +3,8 @@ const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
 
-const {generateMessage} = require('./utils/message');
+
+const {generateMessage, generateLocationMessage} = require('./utils/message');
 const publicPath = path.join(__dirname,'../public');
 const port = process.env.PORT || 3000;
 var app = express();
@@ -23,12 +24,14 @@ io.on('connection',(socket)=>{
         // emit to every one who is connected
         io.emit('newMessage', generateMessage(message.from, message.text));
         callback('This is from the server'); //For client acknowledge receiving the message
-        // emit to everyone except the sender.
-        // socket.broadcast.emit('newMessage', {
-        //     from: message.from,
-        //     text: message.text,
-        //     createdAT: new Date().getTime()
-        // });
+    });
+
+    socket.on('createLocationMessage', (coords)=>{
+        io.emit('newLocationMessage', generateLocationMessage('Admin',coords.latitude, coords.longitude));
+    });
+
+    socket.on('createLocationMessage', (coords)=>{
+        io.emit('newMessage', generateMessage('Admin',`${coords.latitude}, ${coords.longitude}`));
     });
 
     socket.on('disconnect',()=>{
